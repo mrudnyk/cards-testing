@@ -3,24 +3,14 @@ package cards.pojos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.List;
+import java.util.Map;
 
 public class Card {
     private String code;
     private String image;
-    private List<String> images;
+    private Map<String, String> images;
     private String value;
     private String suit;
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "code='" + code + '\'' +
-                ", image='" + image + '\'' +
-                ", images=" + images +
-                ", value='" + value + '\'' +
-                ", suit='" + suit + '\'' +
-                '}';
-    }
 
     public Card() {
         this.code = code;
@@ -38,7 +28,7 @@ public class Card {
         return image;
     }
 
-    public List<String> getImages() {
+    public Map<String, String> getImages() {
         return images;
     }
 
