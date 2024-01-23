@@ -1,0 +1,37 @@
+package cards.pojos;
+
+import java.util.ArrayList;
+
+public class Deck {
+    private Boolean success;
+    private String deck_id;
+    private Boolean shuffled;
+    private Integer remaining;
+
+    public Deck() {
+        this.success = success;
+        this.deck_id = deck_id;
+        this.shuffled = shuffled;
+        this.remaining = remaining;
+    }
+
+    public boolean getSuccess() {
+        return success;
+    }
+
+    public String getDeck_id() {
+        return deck_id;
+    }
+
+    public Boolean getShuffled() {
+        return shuffled;
+    }
+
+    public Integer getRemaining() {
+        return remaining;
+    }
+
+    public void setDeck_id(String deck_id) {
+        this.deck_id = deck_id;
+    }
+}
