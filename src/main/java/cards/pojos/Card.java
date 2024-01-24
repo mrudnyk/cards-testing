@@ -1,8 +1,5 @@
 package cards.pojos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
 import java.util.Map;
 
 public class Card {

@@ -1,16 +1,21 @@
 package cards.pojos;
 
-import cards.pojos.Card;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class Draw {
+    String error;
     private Boolean success;
     private String deck_id;
     private List<Card> cards;
     private Integer remaining;
-    String error;
+
+    public Draw() {
+        this.success = success;
+        this.deck_id = deck_id;
+        this.cards = cards;
+        this.remaining = remaining;
+    }
+
     @Override
     public String toString() {
         return "Draw{" +
@@ -19,13 +24,6 @@ public class Draw {
                 ", cards=" + cards +
                 ", remaining=" + remaining +
                 '}';
-    }
-
-    public Draw() {
-        this.success = success;
-        this.deck_id = deck_id;
-        this.cards = cards;
-        this.remaining = remaining;
     }
 
     public Boolean getSuccess() {

@@ -2,7 +2,6 @@ package cards.step_definitions;
 
 import cards.spec.Specifications;
 import io.cucumber.java.en.Given;
-
 import static cards.spec.Specifications.installSpecification;
 import static cards.utils.ConfigurationProperties.getConfiguration;
 

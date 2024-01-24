@@ -17,11 +17,11 @@ public class Specifications {
 
     public static ResponseSpecification responseSpecOK200() {
         return new ResponseSpecBuilder()
-            .expectStatusCode(200)
+                .expectStatusCode(200)
                 .build();
     }
 
-    public static void installSpecification (RequestSpecification request, ResponseSpecification response) {
+    public static void installSpecification(RequestSpecification request, ResponseSpecification response) {
         RestAssured.requestSpecification = request;
         RestAssured.responseSpecification = response;
     }

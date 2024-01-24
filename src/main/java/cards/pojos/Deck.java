@@ -1,7 +1,5 @@
 package cards.pojos;
 
-import java.util.ArrayList;
-
 public class Deck {
     private Boolean success;
     private String deck_id;
@@ -23,15 +21,15 @@ public class Deck {
         return deck_id;
     }
 
+    public void setDeck_id(String deck_id) {
+        this.deck_id = deck_id;
+    }
+
     public Boolean getShuffled() {
         return shuffled;
     }
 
     public Integer getRemaining() {
         return remaining;
-    }
-
-    public void setDeck_id(String deck_id) {
-        this.deck_id = deck_id;
     }
 }

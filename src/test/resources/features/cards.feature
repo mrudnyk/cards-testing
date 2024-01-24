@@ -2,13 +2,11 @@ Feature: Deck of cards
 
   Scenario: Shuffle a new deck
     Given request specifications have been set
-    When get request to shuffle the deck has been sent and we received the response
-    Then the deck has been shuffled successfully
+    Then get request to shuffle the deck has been sent and the deck has been shuffled successfully
 
   Scenario: Draw 5 cards from the deck
     Given request specifications have been set
-    When get request to draw 5 cards from the deck has been sent and we received the response
-    Then the remaining cards count now is 47
+    Then get request to draw 5 cards from the deck has been sent and the remaining cards count now is 47
 
   Scenario: Draw 2 cards from the deck
     Given request specifications have been set
@@ -16,8 +14,7 @@ Feature: Deck of cards
 
   Scenario: Draw all cards from the deck with aces only
     Given request specifications have been set
-    When get request to draw all cards from the deck has been sent
-    Then each card has value: ACE
+    Then get request to draw all cards from the deck has been sent and each card has value: ACE
 
   Scenario: Draw 5 specific cards from a button of the deck
     Given request specifications have been set
