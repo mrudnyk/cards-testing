@@ -14,7 +14,7 @@ import static cards.utils.ConfigurationProperties.getConfiguration;
 @CucumberOptions(tags = "",
         features = {"src/test/resources/features"},
         glue = {"cards.step_definitions"},
-        plugin = {"pretty", "html:main/cucumber-reports.html"}
+        plugin = {"pretty", "html:reports/cucumber-reports.html"}
 )
 
 public class CucumberRunner extends AbstractTestNGCucumberTests {
