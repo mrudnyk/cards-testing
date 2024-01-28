@@ -6,6 +6,9 @@ public class Return {
     private Integer remaining;
 
     public Return() {
+    }
+
+    public Return(Boolean success, String deck_id, Integer remaining) {
         this.success = success;
         this.deck_id = deck_id;
         this.remaining = remaining;

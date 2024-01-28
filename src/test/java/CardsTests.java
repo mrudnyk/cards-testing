@@ -3,6 +3,7 @@ import cards.pojos.Deck;
 import cards.pojos.Draw;
 import cards.pojos.Return;
 import cards.spec.Specifications;
+import cards.utils.ConfigurationProperties;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import org.testng.Assert;
@@ -11,6 +12,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import static cards.spec.Specifications.installSpecification;
 import static cards.utils.ConfigurationProperties.getConfiguration;
@@ -51,6 +53,17 @@ public class CardsTests {
                 .get("/api/deck/h8tz419w96ru/draw/?count=2")
                 .then().log().all()
                 .body("remaining", equalTo(50));
+    }
+
+    @Test (description = "Draw cards from deck with aces", groups = {"Deck with aces only"})
+    public void deckWithAces2 () {
+        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
+        List<Card> cards = given()
+                .when()
+                .get("/api/deck/adshf1gqwyc6/draw/?count=10")
+                .then().log().all()
+                .extract().body().jsonPath().getList("cards", Card.class);
+        cards.stream().forEach(x->Assert.assertEquals(x.getValue(), "ACE"));
     }
 
     @Test(description = "Draw cards from deck with aces", groups = {"Deck with aces only"})

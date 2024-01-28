@@ -10,6 +10,9 @@ public class Card {
     private String suit;
 
     public Card() {
+    }
+
+    public Card(String code, String image, Map<String, String> images, String value, String suit) {
         this.code = code;
         this.image = image;
         this.images = images;

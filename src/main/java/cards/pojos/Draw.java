@@ -10,6 +10,10 @@ public class Draw {
     private Integer remaining;
 
     public Draw() {
+    }
+
+    public Draw(String error, Boolean success, String deck_id, List<Card> cards, Integer remaining) {
+        this.error = error;
         this.success = success;
         this.deck_id = deck_id;
         this.cards = cards;

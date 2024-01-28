@@ -7,6 +7,9 @@ public class Deck {
     private Integer remaining;
 
     public Deck() {
+    }
+
+    public Deck(Boolean success, String deck_id, Boolean shuffled, Integer remaining) {
         this.success = success;
         this.deck_id = deck_id;
         this.shuffled = shuffled;
