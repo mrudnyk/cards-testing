@@ -10,6 +10,8 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import java.io.FileNotFoundException;
+
 import static cards.spec.Specifications.installSpecification;
 import static cards.utils.ConfigurationProperties.getConfiguration;
 import static io.restassured.RestAssured.given;
