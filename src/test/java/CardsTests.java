@@ -4,109 +4,104 @@ import cards.pojos.Draw;
 import cards.pojos.Return;
 import cards.spec.Specifications;
 import cards.utils.ConfigurationProperties;
+import cards.utils.EndPoints;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import org.testng.Assert;
-import org.testng.annotations.AfterGroups;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import static cards.spec.Specifications.installSpecification;
+import static cards.pojos.Deck.getDeck_id;
+import static cards.spec.Specifications.*;
 import static cards.utils.ConfigurationProperties.getConfiguration;
+import static cards.utils.EndPoints.*;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class CardsTests {
-
-    @Test
-    public void shuffleDeck() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
+    @BeforeMethod ()
+    public static String shuffleDeck() {
+        installSpecification(requestSpec(getConfiguration().getString("deck.of.card.uri")), responseSpecOK200());
         Deck deck = given()
-                .when().get("/api/deck/new/shuffle/?deck_count=1")
+                .when().get(NEW_DECK.getEndPoint() + SHUFFLE.getEndPoint())
                 .then().log().all()
                 .extract().body().jsonPath().getObject("", Deck.class);
-        Assert.assertEquals(deck.getSuccess(), true);
-        System.out.println("Deck id now is: " + deck.getDeck_id());
+        assertTrue(deck.getSuccess());
+        return getDeck_id();
     }
+
+    @BeforeMethod()
+    public static String shuffleDeckWithAces () {
+        installSpecification(requestSpec(getConfiguration().getString("deck.of.card.uri")), responseSpecOK200());
+        Deck deck = given()
+                .when().get(NEW_DECK.getEndPoint() + SHUFFLE.getEndPoint() + "?cards=AS,AS,AD,AD,AC,AC,AH,AH")
+                .then().log().all()
+                .extract().body().jsonPath().getObject("", Deck.class);
+        assertTrue(deck.getSuccess());
+        return getDeck_id();
+    }
+
 
     @Test(description = "Drawing 5 cards from the deck")
     public void checkRemainingCardsCount1() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
+        installSpecification(requestSpec(getConfiguration().getString("deck.of.card.uri")), responseSpecOK200());
+        String deckId1 = shuffleDeck();
+        int count = 10;
         Draw draw = given()
                 .when()
-                .get("/api/deck/h8tz419w96ru/draw/?count=5")
+                .get(deckId1 + DRAW_CARD.getEndPoint() + count)
                 .then().log().all()
                 .extract()
                 .response().as(new TypeRef<>() {
                 });
-        Assert.assertEquals(draw.getRemaining(), 47);
-        System.out.println("Remaining now is: " + draw.getRemaining());
+        int remaining = 52 - count;
+        assertEquals(draw.getRemaining(), remaining);
     }
 
-    @Test(description = "Drawing 2 cards from the deck")
-    public void checkRemainingCardCount2() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
-        given()
-                .get("/api/deck/h8tz419w96ru/draw/?count=2")
-                .then().log().all()
-                .body("remaining", equalTo(50));
-    }
-
-    @Test (description = "Draw cards from deck with aces", groups = {"Deck with aces only"})
-    public void deckWithAces2 () {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
+    @Test(description = "Draw cards from deck with aces using stream")
+    public void deckWithAces2() {
+        installSpecification(requestSpec(getConfiguration().getString("deck.of.card.uri")), responseSpecOK200());
+        String deckId2 = shuffleDeckWithAces();
         List<Card> cards = given()
                 .when()
-                .get("/api/deck/adshf1gqwyc6/draw/?count=10")
+                .get(deckId2 + DRAW_CARD.getEndPoint() + 8)
                 .then().log().all()
                 .extract().body().jsonPath().getList("cards", Card.class);
-        cards.stream().forEach(x->Assert.assertEquals(x.getValue(), "ACE"));
+        cards.stream().forEach(x -> assertEquals(x.getValue(), "ACE"));
     }
 
-    @Test(description = "Draw cards from deck with aces", groups = {"Deck with aces only"})
+    @Test(description = "Draw cards from deck with aces using for loop")
     public void deckWithAces1() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
+        installSpecification(requestSpec(getConfiguration().getString("deck.of.card.uri")), responseSpecOK200());
+        String deckId2 = shuffleDeckWithAces();
         Draw draw = given()
                 .when()
-                .get("/api/deck/adshf1gqwyc6/draw/?count=10")
+                .get(deckId2 + DRAW_CARD.getEndPoint() + 8)
                 .then().log().all()
                 .extract().as(Draw.class);
         for (Card card : draw.getCards()) {
-            Assert.assertEquals(card.getValue(), "ACE");
+            assertEquals(card.getValue(), "ACE");
         }
     }
 
     @Test(description = "Draw 5 specific cards")
     public void drawing5SpecificCards() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
+        installSpecification(requestSpec(getConfiguration().getString("deck.of.card.uri")), responseSpecOK200());
+        String deckId1 = shuffleDeck();
         given()
-                .when().get("/api/deck/h8tz419w96ru/draw/bottom/?count=5&cards=AD,6D,KD,AC,6C")
+                .when()
+                .get(deckId1 + DRAW_CARD.getEndPoint() +"5&cards=AD,6D,KD,AC,6C")
                 .then().log().all()
                 .body("remaining", equalTo(47))
                 .body("cards.code", not(hasItems("AD", "6D", "KD", "AC", "6C")));
     }
-
-    @AfterMethod
-    public void returnCards() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
-        Return return1 = RestAssured.given().log().all()
-                .when()
-                .get("/api/deck/h8tz419w96ru/return/").as(Return.class);
-        Assert.assertEquals(return1.getRemaining(), 52);
-    }
-
-    @AfterGroups("Deck with aces only")
-    public void returnCards1() {
-        installSpecification(Specifications.requestSpec(getConfiguration().getString("deck.of.card.uri")), Specifications.responseSpecOK200());
-        Return return1 = RestAssured.given().log().all()
-                .when()
-                .get("/api/deck/adshf1gqwyc6/return/").as(Return.class);
-        Assert.assertEquals(return1.getRemaining(), 10);
-    }
 }
+
 
 
 

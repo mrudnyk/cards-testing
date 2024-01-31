@@ -1,16 +1,14 @@
+@api-tests
 Feature: Deck of cards
 
-  Scenario: Shuffle a new deck
+  Scenario Outline: Draw x cards from the deck
     Given request specifications have been set
-    Then get request to shuffle the deck has been sent and the deck has been shuffled successfully
-
-  Scenario: Draw 5 cards from the deck
-    Given request specifications have been set
-    Then get request to draw 5 cards from the deck has been sent and the remaining cards count now is 47
-
-  Scenario: Draw 2 cards from the deck
-    Given request specifications have been set
-    Then get request to draw 2 cards from the deck has been sent and the remaining cards count now is 50
+    Then get request to draw <count> cards from the deck has been sent and the remaining count now is: <remaining>
+    Examples:
+      |   count  |remaining |
+      |    4     |    48    |
+      |    6     |    46    |
+      |    20    |    32    |
 
   Scenario: Draw all cards from the deck with aces only
     Given request specifications have been set

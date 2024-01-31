@@ -2,7 +2,7 @@ package cards.pojos;
 
 public class Deck {
     private Boolean success;
-    private String deck_id;
+    private static String deck_id;
     private Boolean shuffled;
     private Integer remaining;
 
@@ -20,7 +20,7 @@ public class Deck {
         return success;
     }
 
-    public String getDeck_id() {
+    public static String getDeck_id() {
         return deck_id;
     }
 
